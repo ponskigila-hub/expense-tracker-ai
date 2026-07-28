@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from fastapi import Depends
 from typing import List
 from fastapi import HTTPException
+from app.services.transaction_service import TransactionService
 
 from app.schemas.transaction import (
     TransactionCreate,
@@ -26,29 +27,10 @@ def create_transaction(
     db: Session = Depends(get_db)
 ):
 
-    db_transaction = Transaction(
-
-        date=transaction.date,
-
-        description=transaction.description,
-
-        amount=transaction.amount,
-
-        type=transaction.type,
-
-        category=transaction.category,
-
-        notes=transaction.notes
-
+    return TransactionService.create_transaction(
+        db,
+        transaction
     )
-
-    db.add(db_transaction)
-
-    db.commit()
-
-    db.refresh(db_transaction)
-
-    return db_transaction
 
 @router.get(
     "/transactions",
