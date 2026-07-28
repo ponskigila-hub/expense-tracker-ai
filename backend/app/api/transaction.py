@@ -60,6 +60,42 @@ def get_transactions(
     transactions = db.query(Transaction).all()
     return transactions
 
+
+@router.put(
+    "/transactions/{transaction_id}",
+    response_model=TransactionResponse
+)
+def update_transaction(
+    transaction_id: int,
+    transaction: TransactionCreate,
+    db: Session = Depends(get_db)
+):
+
+    db_transaction = (
+        db.query(Transaction)
+        .filter(Transaction.id == transaction_id)
+        .first()
+    )
+
+    if db_transaction is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Transaction not found"
+        )
+
+    db_transaction.date = transaction.date
+    db_transaction.description = transaction.description
+    db_transaction.amount = transaction.amount
+    db_transaction.type = transaction.type
+    db_transaction.category = transaction.category
+    db_transaction.notes = transaction.notes
+
+    db.commit()
+
+    db.refresh(db_transaction)
+
+    return db_transaction
+
 @router.get(
     "/transactions/{transaction_id}",
     response_model=TransactionResponse
