@@ -16,7 +16,6 @@ from app.models.transaction import Transaction
 
 router = APIRouter()
 
-
 @router.post(
     "/transactions",
     response_model=TransactionResponse
@@ -39,8 +38,7 @@ def create_transaction(
 def get_transactions(
     db: Session = Depends(get_db)
 ):
-    transactions = db.query(Transaction).all()
-    return transactions
+    return TransactionService.get_transactions(db)
 
 
 @router.put(
@@ -53,56 +51,21 @@ def update_transaction(
     db: Session = Depends(get_db)
 ):
 
-    db_transaction = (
-        db.query(Transaction)
-        .filter(Transaction.id == transaction_id)
-        .first()
+    return TransactionService.update_transaction(
+        db,
+        transaction_id,
+        transaction
     )
-
-    if db_transaction is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Transaction not found"
-        )
-
-    db_transaction.date = transaction.date
-    db_transaction.description = transaction.description
-    db_transaction.amount = transaction.amount
-    db_transaction.type = transaction.type
-    db_transaction.category = transaction.category
-    db_transaction.notes = transaction.notes
-
-    db.commit()
-
-    db.refresh(db_transaction)
-
-    return db_transaction
 
 @router.delete("/transactions/{transaction_id}")
 def delete_transaction(
     transaction_id: int,
     db: Session = Depends(get_db)
 ):
-
-    transaction = (
-        db.query(Transaction)
-        .filter(Transaction.id == transaction_id)
-        .first()
+    return TransactionService.delete_transaction(
+        db,
+        transaction_id
     )
-
-    if transaction is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Transaction not found"
-        )
-
-    db.delete(transaction)
-
-    db.commit()
-
-    return {
-        "message": "Transaction deleted successfully"
-    }
 
 @router.get(
     "/transactions/{transaction_id}",
@@ -113,16 +76,7 @@ def get_transaction(
     db: Session = Depends(get_db)
 ):
 
-    transaction = (
-        db.query(Transaction)
-        .filter(Transaction.id == transaction_id)
-        .first()
+    return TransactionService.get_transaction(
+        db,
+        transaction_id
     )
-
-    if transaction is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Transaction not found"
-        )
-
-    return transaction
