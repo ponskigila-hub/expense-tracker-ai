@@ -2,8 +2,10 @@ from sqlalchemy.orm import Session
 
 from app.models.transaction import Transaction
 from app.schemas.transaction import TransactionCreate
+from app.repositories.transaction_repository import TransactionRepository
 
 from fastapi import HTTPException
+
 
 class TransactionService:
 
@@ -22,13 +24,10 @@ class TransactionService:
             notes=transaction.notes
         )
 
-        db.add(db_transaction)
-
-        db.commit()
-
-        db.refresh(db_transaction)
-
-        return db_transaction
+        return TransactionRepository.create(
+            db,
+            db_transaction
+        )
     
     @staticmethod
     def get_transaction(
@@ -36,10 +35,9 @@ class TransactionService:
         transaction_id: int
     ):
 
-        transaction = (
-            db.query(Transaction)
-            .filter(Transaction.id == transaction_id)
-            .first()
+        transaction = TransactionRepository.get_by_id(
+            db,
+            transaction_id
         )
 
         if transaction is None:
@@ -57,10 +55,9 @@ class TransactionService:
         transaction_data: TransactionCreate
     ):
 
-        transaction = (
-            db.query(Transaction)
-            .filter(Transaction.id == transaction_id)
-            .first()
+        transaction = TransactionRepository.get_by_id(
+            db,
+            transaction_id
         )
 
         if transaction is None:
@@ -76,10 +73,10 @@ class TransactionService:
         transaction.category = transaction_data.category
         transaction.notes = transaction_data.notes
 
-        db.commit()
-        db.refresh(transaction)
-
-        return transaction
+        return TransactionRepository.update(
+            db,
+            transaction
+        )
     
     @staticmethod
     def delete_transaction(
@@ -87,10 +84,9 @@ class TransactionService:
         transaction_id: int
     ):
 
-        transaction = (
-            db.query(Transaction)
-            .filter(Transaction.id == transaction_id)
-            .first()
+        transaction = TransactionRepository.get_by_id(
+            db,
+            transaction_id
         )
 
         if transaction is None:
@@ -99,9 +95,10 @@ class TransactionService:
                 detail="Transaction not found"
             )
 
-        db.delete(transaction)
-
-        db.commit()
+        TransactionRepository.delete(
+            db,
+            transaction
+        )
 
         return {
             "message": "Transaction deleted successfully"
@@ -109,4 +106,4 @@ class TransactionService:
         
     @staticmethod
     def get_transactions(db: Session):
-        return db.query(Transaction).all()
+        return TransactionRepository.get_all(db)
