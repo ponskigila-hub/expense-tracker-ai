@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 from typing import List
+from fastapi import HTTPException
 
 from app.schemas.transaction import (
     TransactionCreate,
@@ -58,3 +59,26 @@ def get_transactions(
 ):
     transactions = db.query(Transaction).all()
     return transactions
+
+@router.get(
+    "/transactions/{transaction_id}",
+    response_model=TransactionResponse
+)
+def get_transaction(
+    transaction_id: int,
+    db: Session = Depends(get_db)
+):
+
+    transaction = (
+        db.query(Transaction)
+        .filter(Transaction.id == transaction_id)
+        .first()
+    )
+
+    if transaction is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Transaction not found"
+        )
+
+    return transaction
