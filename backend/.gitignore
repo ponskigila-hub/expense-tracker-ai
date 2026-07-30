@@ -37,4 +37,4 @@ build/
 *.egg-info/
 
 # Logs
-*.log
+*.loggit status
