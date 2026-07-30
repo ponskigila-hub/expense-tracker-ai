@@ -5,6 +5,7 @@ from app.models.transaction import Transaction
 
 from app.database.database import Base
 from app.api.transaction import router as transaction_router 
+from app.models.user import User
 
 #Base.metadata.create_all(bind=engine)
 
