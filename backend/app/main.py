@@ -6,7 +6,7 @@ from app.models.transaction import Transaction
 from app.database.database import Base
 from app.api.transaction import router as transaction_router 
 
-Base.metadata.create_all(bind=engine)
+#Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI(
