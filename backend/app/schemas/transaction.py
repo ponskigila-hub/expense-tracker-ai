@@ -18,6 +18,8 @@ class TransactionResponse(BaseModel):
 
     notes: str | None
 
+    user_id: int
+
     created_at: datetime
 
     model_config = {

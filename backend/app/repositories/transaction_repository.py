@@ -21,20 +21,29 @@ class TransactionRepository:
     
     @staticmethod
     def get_all(
-        db: Session
-    ):
-
-        return db.query(Transaction).all()
-    
-    @staticmethod
-    def get_by_id(
         db: Session,
-        transaction_id: int
+        user_id: int
     ):
 
         return (
             db.query(Transaction)
-            .filter(Transaction.id == transaction_id)
+            .filter(Transaction.user_id == user_id)
+            .all()
+        )
+    
+    @staticmethod
+    def get_by_id(
+        db: Session,
+        transaction_id: int,
+        user_id: int
+    ):
+
+        return (
+            db.query(Transaction)
+            .filter(
+                Transaction.id == transaction_id,
+                Transaction.user_id == user_id
+            )
             .first()
         )
         

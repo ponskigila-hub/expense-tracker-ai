@@ -4,6 +4,8 @@ from sqlalchemy import String
 from sqlalchemy import Float
 from sqlalchemy import Date
 from sqlalchemy import DateTime
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 from datetime import datetime
 
@@ -28,7 +30,19 @@ class Transaction(Base):
 
     notes = Column(String)
 
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True
+    )
+
     created_at = Column(
         DateTime,
         default=datetime.utcnow
+    )
+
+    owner = relationship(
+        "User",
+        back_populates="transactions"
     )

@@ -13,8 +13,12 @@ from sqlalchemy.orm import Session
 from app.database.database import get_db
 
 from app.models.transaction import Transaction
+from app.models.user import User
+from app.security import get_current_user
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Transactions"]
+)
 
 @router.post(
     "/transactions",
@@ -23,12 +27,14 @@ router = APIRouter()
 
 def create_transaction(
     transaction: TransactionCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return TransactionService.create_transaction(
         db,
-        transaction
+        transaction,
+        current_user.id
     )
 
 @router.get(
@@ -36,9 +42,13 @@ def create_transaction(
     response_model=List[TransactionResponse]
 )
 def get_transactions(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    return TransactionService.get_transactions(db)
+    return TransactionService.get_transactions(
+        db,
+        current_user.id
+    )
 
 
 @router.put(
@@ -48,23 +58,27 @@ def get_transactions(
 def update_transaction(
     transaction_id: int,
     transaction: TransactionCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return TransactionService.update_transaction(
         db,
         transaction_id,
-        transaction
+        transaction,
+        current_user.id
     )
 
 @router.delete("/transactions/{transaction_id}")
 def delete_transaction(
     transaction_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     return TransactionService.delete_transaction(
         db,
-        transaction_id
+        transaction_id,
+        current_user.id
     )
 
 @router.get(
@@ -73,10 +87,12 @@ def delete_transaction(
 )
 def get_transaction(
     transaction_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     return TransactionService.get_transaction(
         db,
-        transaction_id
+        transaction_id,
+        current_user.id
     )

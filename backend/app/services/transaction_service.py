@@ -12,7 +12,8 @@ class TransactionService:
     @staticmethod
     def create_transaction(
         db: Session,
-        transaction: TransactionCreate
+        transaction: TransactionCreate,
+        user_id: int
     ):
 
         db_transaction = Transaction(
@@ -21,7 +22,8 @@ class TransactionService:
             amount=transaction.amount,
             type=transaction.type,
             category=transaction.category,
-            notes=transaction.notes
+            notes=transaction.notes,
+            user_id=user_id
         )
 
         return TransactionRepository.create(
@@ -32,12 +34,14 @@ class TransactionService:
     @staticmethod
     def get_transaction(
         db: Session,
-        transaction_id: int
+        transaction_id: int,
+        user_id: int
     ):
 
         transaction = TransactionRepository.get_by_id(
             db,
-            transaction_id
+            transaction_id,
+            user_id
         )
 
         if transaction is None:
@@ -52,12 +56,14 @@ class TransactionService:
     def update_transaction(
         db: Session,
         transaction_id: int,
-        transaction_data: TransactionCreate
+        transaction_data: TransactionCreate,
+        user_id: int
     ):
 
         transaction = TransactionRepository.get_by_id(
             db,
-            transaction_id
+            transaction_id,
+            user_id
         )
 
         if transaction is None:
@@ -81,12 +87,14 @@ class TransactionService:
     @staticmethod
     def delete_transaction(
         db: Session,
-        transaction_id: int
+        transaction_id: int,
+        user_id: int
     ):
 
         transaction = TransactionRepository.get_by_id(
             db,
-            transaction_id
+            transaction_id,
+            user_id
         )
 
         if transaction is None:
@@ -105,5 +113,8 @@ class TransactionService:
         }
         
     @staticmethod
-    def get_transactions(db: Session):
-        return TransactionRepository.get_all(db)
+    def get_transactions(
+        db: Session,
+        user_id: int
+    ):
+        return TransactionRepository.get_all(db, user_id)
