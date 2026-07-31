@@ -44,7 +44,7 @@ def get_transactions(
 @router.put(
     "/transactions/{transaction_id}",
     response_model=TransactionResponse
-)
+)   
 def update_transaction(
     transaction_id: int,
     transaction: TransactionCreate,
