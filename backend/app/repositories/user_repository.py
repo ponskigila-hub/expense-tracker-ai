@@ -42,3 +42,15 @@ class UserRepository:
             .filter(User.username == username)
             .first()
         )
+        
+    @staticmethod
+    def authenticate(
+        db: Session,
+        email: str
+    ):
+
+        return (
+            db.query(User)
+            .filter(User.email == email)
+            .first()
+        )

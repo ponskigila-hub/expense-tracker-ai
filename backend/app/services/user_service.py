@@ -4,11 +4,18 @@ from fastapi import HTTPException
 
 from app.models.user import User
 
-from app.schemas.user import UserCreate
+from app.schemas.user import (
+    UserCreate,
+    UserLogin,
+)
 
 from app.repositories.user_repository import UserRepository
 
-from app.security import hash_password
+from app.security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+)
 
 
 class UserService:
@@ -17,7 +24,7 @@ class UserService:
     def register_user(
         db: Session,
         user_data: UserCreate
-    ):
+    ) -> User:
 
         # Check if email already exists
         existing_email = UserRepository.get_by_email(
@@ -60,3 +67,43 @@ class UserService:
             db,
             user
         )
+
+    @staticmethod
+    def login(
+        db: Session,
+        credentials: UserLogin
+    ) -> dict:
+
+        # Find user by email
+        user = UserRepository.authenticate(
+            db,
+            credentials.email
+        )
+
+        if user is None:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid email or password"
+            )
+
+        # Verify password
+        if not verify_password(
+            credentials.password,
+            user.hashed_password
+        ):
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid email or password"
+            )
+
+        # Generate JWT access token
+        access_token = create_access_token(
+            {
+                "sub": user.email
+            }
+        )
+
+        return {
+            "access_token": access_token,
+            "token_type": "bearer"
+        }
