@@ -130,6 +130,7 @@ pyFUME==0.3.1
 Pygments==2.20.0
 pymongo==4.6.1
 pyparsing==3.3.2
+pytesseract==0.3.13
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.0
 python-jose==3.3.0

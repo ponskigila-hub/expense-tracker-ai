@@ -15,6 +15,9 @@ env/
 *.db
 *.sqlite3
 
+# Uploaded receipt images (Sprint 19)
+storage/
+
 # IDE
 .vscode/
 .idea/
