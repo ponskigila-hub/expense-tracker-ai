@@ -1,0 +1,31 @@
+# Version control
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Virtual environments (never bake a host venv into the image)
+venv/
+.venv/
+env/
+
+# Secrets — passed in at runtime via docker-compose env_file, never baked in
+.env
+
+# Dev database — the container gets its own via a volume mount, not this file
+*.db
+*.sqlite3
+
+# User-uploaded content — persisted via a volume, not part of the image
+storage/
+
+# Editor/OS cruft
+.vscode/
+.idea/
+.DS_Store
