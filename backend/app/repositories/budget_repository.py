@@ -64,6 +64,11 @@ class BudgetRepository:
         )
 
     @staticmethod
+    def get_all_global(db: Session):
+        """Used by the scheduler's alert checker — spans all users."""
+        return db.query(Budget).all()
+
+    @staticmethod
     def update(
         db: Session,
         budget: Budget

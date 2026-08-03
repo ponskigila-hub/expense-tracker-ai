@@ -48,4 +48,8 @@ class Budget(Base):
         onupdate=datetime.utcnow
     )
 
+    # "2026-08" — the last calendar month a threshold alert was sent for
+    # this budget. Prevents re-notifying every time the checker job runs.
+    last_alert_month = Column(String, nullable=True)
+
     owner = relationship("User", back_populates="budgets")

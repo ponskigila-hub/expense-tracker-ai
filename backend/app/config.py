@@ -26,5 +26,15 @@ class Settings:
     # Sprint 19 — where uploaded receipt images are stored on disk.
     RECEIPT_STORAGE_DIR = os.getenv("RECEIPT_STORAGE_DIR", "storage/receipts")
 
+    # Sprint 21 — Notifications. All optional; a channel is only used if
+    # its config is present. Nothing is required for the app to run.
+    SMTP_HOST = os.getenv("SMTP_HOST")
+    SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+    SMTP_USER = os.getenv("SMTP_USER")
+    SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+    SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL", SMTP_USER)
+
+    DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
+
 
 settings = Settings()

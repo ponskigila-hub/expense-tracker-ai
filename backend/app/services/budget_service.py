@@ -166,3 +166,56 @@ class BudgetService:
         BudgetRepository.delete(db, budget)
 
         return {"message": "Budget deleted successfully"}
+
+    ALERT_THRESHOLD_PERCENT = 90
+
+    @staticmethod
+    def check_and_send_alerts(db: Session) -> list[dict]:
+        """
+        Scans every budget (all users). For any budget that's crossed
+        ALERT_THRESHOLD_PERCENT usage and hasn't already been alerted on
+        this calendar month, sends a notification and records the month
+        so it doesn't fire again until next month. Meant to be called
+        once a day by the background scheduler.
+        """
+
+        from app.notifications.notification_service import NotificationService
+
+        this_month = date.today().strftime("%Y-%m")
+        sent = []
+
+        for budget in BudgetRepository.get_all_global(db):
+
+            if budget.last_alert_month == this_month:
+                continue
+
+            spent = BudgetService._spent_this_month(db, budget.user_id, budget.category)
+            percentage_used = (spent / budget.amount * 100) if budget.amount > 0 else 0
+
+            if percentage_used < BudgetService.ALERT_THRESHOLD_PERCENT:
+                continue
+
+            status = "exceeded" if spent > budget.amount else "almost reached"
+
+            subject = f"Budget alert: {budget.category}"
+            message = (
+                f"Your '{budget.category}' budget is {status} — "
+                f"spent {spent:,.0f} of {budget.amount:,.0f} "
+                f"({percentage_used:.1f}%) this month."
+            )
+
+            recipient_email = budget.owner.email if budget.owner else None
+
+            results = NotificationService.send(subject, message, to_email=recipient_email)
+
+            budget.last_alert_month = this_month
+            db.commit()
+
+            sent.append({
+                "budget_id": budget.id,
+                "category": budget.category,
+                "percentage_used": round(percentage_used, 1),
+                "channels": results,
+            })
+
+        return sent

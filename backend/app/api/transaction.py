@@ -1,12 +1,15 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from typing import List
+from fastapi import Query
+from typing import List, Literal
+from datetime import date
 from fastapi import HTTPException
 from app.services.transaction_service import TransactionService
 
 from app.schemas.transaction import (
     TransactionCreate,
     TransactionResponse,
+    PaginatedTransactionResponse,
 )
 from sqlalchemy.orm import Session
 
@@ -39,15 +42,37 @@ def create_transaction(
 
 @router.get(
     "/transactions",
-    response_model=List[TransactionResponse]
+    response_model=PaginatedTransactionResponse
 )
 def get_transactions(
+    category: str | None = Query(default=None),
+    type: str | None = Query(default=None, description="Filter by 'income' or 'expense'"),
+    date_from: date | None = Query(default=None),
+    date_to: date | None = Query(default=None),
+    min_amount: float | None = Query(default=None, ge=0),
+    max_amount: float | None = Query(default=None, ge=0),
+    search: str | None = Query(default=None, description="Case-insensitive substring match on description"),
+    sort_by: Literal["date", "amount", "description", "category", "created_at"] = Query(default="date"),
+    sort_order: Literal["asc", "desc"] = Query(default="desc"),
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=20, ge=1, le=100),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return TransactionService.get_transactions(
+    return TransactionService.search_transactions(
         db,
-        current_user.id
+        current_user.id,
+        category=category,
+        type_=type,
+        date_from=date_from,
+        date_to=date_to,
+        min_amount=min_amount,
+        max_amount=max_amount,
+        search=search,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        page=page,
+        page_size=page_size,
     )
 
 

@@ -40,3 +40,16 @@ class TransactionCreate(BaseModel):
     category: str
 
     notes: str | None = None
+
+
+class PaginatedTransactionResponse(BaseModel):
+
+    items: list[TransactionResponse]
+
+    total: int
+
+    page: int
+
+    page_size: int
+
+    total_pages: int

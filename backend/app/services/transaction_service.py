@@ -113,8 +113,44 @@ class TransactionService:
         }
         
     @staticmethod
-    def get_transactions(
+    def search_transactions(
         db: Session,
-        user_id: int
+        user_id: int,
+        category: str | None = None,
+        type_: str | None = None,
+        date_from=None,
+        date_to=None,
+        min_amount: float | None = None,
+        max_amount: float | None = None,
+        search: str | None = None,
+        sort_by: str = "date",
+        sort_order: str = "desc",
+        page: int = 1,
+        page_size: int = 20,
     ):
-        return TransactionRepository.get_all(db, user_id)
+
+        items, total = TransactionRepository.search(
+            db,
+            user_id,
+            category=category,
+            type_=type_,
+            date_from=date_from,
+            date_to=date_to,
+            min_amount=min_amount,
+            max_amount=max_amount,
+            search=search,
+            sort_by=sort_by,
+            sort_order=sort_order,
+            page=page,
+            page_size=page_size,
+        )
+
+        total_pages = (total + page_size - 1) // page_size if page_size > 0 else 0
+
+        return {
+            "items": items,
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "total_pages": total_pages,
+        }

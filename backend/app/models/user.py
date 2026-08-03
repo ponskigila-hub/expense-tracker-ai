@@ -43,3 +43,9 @@ class User(Base):
         back_populates="owner",
         cascade="all, delete-orphan"
     )
+
+    recurring_transactions = relationship(
+        "RecurringTransaction",
+        back_populates="owner",
+        cascade="all, delete-orphan"
+    )
