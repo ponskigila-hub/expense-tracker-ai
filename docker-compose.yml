@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./backend
+    container_name: expense-tracker-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      # Bind-mount the SQLite file so data survives `docker compose down`
+      # and rebuilds. IMPORTANT: this file must already exist on the host
+      # before the first `docker compose up`, or Docker will create a
+      # *directory* with this name instead (see the guide).
+      - ./backend/expense_tracker.db:/app/expense_tracker.db
+      # Named volume for uploaded receipt images (Sprint 19) — doesn't
+      # need to exist on the host beforehand, Docker manages this one.
+      - receipt_storage:/app/storage
+    restart: unless-stopped
+
+volumes:
+  receipt_storage:
