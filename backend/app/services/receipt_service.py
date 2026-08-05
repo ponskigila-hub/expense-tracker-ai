@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.models.receipt import Receipt
 from app.models.transaction import Transaction
-from app.repositories.receipt_repository import ReceiptRepository
 from app.ml.ocr_service import extract_text, parse_receipt
 from app.ml.category_classifier import category_classifier
 

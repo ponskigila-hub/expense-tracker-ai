@@ -1,9 +1,8 @@
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import Query
-from typing import List, Literal
+from typing import Literal
 from datetime import date
-from fastapi import HTTPException
 from app.services.transaction_service import TransactionService
 
 from app.schemas.transaction import (
@@ -15,7 +14,6 @@ from sqlalchemy.orm import Session
 
 from app.database.database import get_db
 
-from app.models.transaction import Transaction
 from app.models.user import User
 from app.security import get_current_user
 

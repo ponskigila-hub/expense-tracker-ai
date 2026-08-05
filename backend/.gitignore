@@ -41,3 +41,8 @@ build/
 
 # Logs
 *.loggit status
+# Ruff cache
+.ruff_cache/
+
+# Coverage artifacts
+coverage.xml

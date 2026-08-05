@@ -1,0 +1,7 @@
+# Everything the app needs to run...
+-r requirements.txt
+
+# ...plus tools only needed for local development and CI.
+pytest==9.1.1
+pytest-cov==7.1.0
+ruff==0.16.1

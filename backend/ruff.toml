@@ -1,0 +1,9 @@
+line-length = 120
+
+[lint]
+# E9  = syntax errors
+# F   = pyflakes (unused imports, undefined names, etc.) — real bugs
+# Deliberately NOT enabling import-sorting (I) or line-length (E501):
+# this codebase's formatting style doesn't follow isort conventions,
+# and enforcing that here would just create noise unrelated to bugs.
+select = ["E9", "F"]

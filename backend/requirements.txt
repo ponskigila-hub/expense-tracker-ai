@@ -32,7 +32,3 @@ APScheduler==3.11.3
 # --- Sprint 22: Export (CSV uses stdlib csv) ---
 openpyxl==3.1.5
 fpdf2==2.8.7
-
-# --- Sprint 24: Testing ---
-pytest==9.1.1
-pytest-cov==7.1.0

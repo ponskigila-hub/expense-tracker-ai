@@ -1,5 +1,5 @@
 import re
-from datetime import date, datetime
+from datetime import date
 from io import BytesIO
 
 import pytesseract
