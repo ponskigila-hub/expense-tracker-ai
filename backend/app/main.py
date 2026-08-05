@@ -1,8 +1,11 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi import Depends
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
-
+from app.database.database import get_db
 from app.api.transaction import router as transaction_router 
 from app.api.auth import router as auth_router
 from app.api.analytics import router as analytics_router
@@ -47,3 +50,20 @@ def root():
     return {
         "message": "ExpenseTrackerAI API is running!"
     }
+
+
+@app.get("/health")
+def health_check(db: Session = Depends(get_db)):
+    """
+    Does a real round-trip to the database, not just a static 200 OK.
+    Two reasons this matters in production: (1) it actually tells you
+    whether the DB connection is healthy, not just whether the process
+    is alive, and (2) Sprint 27's keep-alive ping hits this endpoint —
+    querying the DB here keeps a serverless Postgres provider (e.g.
+    Neon) from suspending its compute due to inactivity, in the same
+    ping that keeps this web service itself from sleeping.
+    """
+
+    db.execute(text("SELECT 1"))
+
+    return {"status": "ok"}

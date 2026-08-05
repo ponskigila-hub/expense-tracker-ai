@@ -1,10 +1,7 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
-from app.database.database import Base
+from app.database.database import Base, engine
 from app.models.transaction import Transaction
 from app.models.user import User
 from app.models.budget import Budget
@@ -27,10 +24,12 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# Deliberately NOT using alembic.ini's `sqlalchemy.url` (or
+# engine_from_config) here. The app's real engine — built from
+# DATABASE_URL in .env, see app/database/database.py — is reused
+# directly instead, so migrations always target whatever database the
+# app itself is actually configured for (SQLite locally, Postgres in
+# production) with zero duplicated config to keep in sync.
 
 
 def run_migrations_offline() -> None:
@@ -45,7 +44,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = engine.url.render_as_string(hide_password=False)
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -64,13 +63,7 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
-
-    with connectable.connect() as connection:
+    with engine.connect() as connection:
         context.configure(
             connection=connection, target_metadata=target_metadata
         )

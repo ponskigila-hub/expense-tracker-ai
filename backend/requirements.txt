@@ -8,6 +8,7 @@ python-multipart==0.0.6
 # --- Database & migrations ---
 SQLAlchemy==2.0.51
 alembic==1.18.5
+psycopg2-binary==2.9.12  # Postgres driver — used in production (Sprint 27); local dev stays on SQLite
 
 # --- Auth & security ---
 python-jose[cryptography]==3.3.0
