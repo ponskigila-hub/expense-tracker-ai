@@ -40,7 +40,7 @@ build/
 *.egg-info/
 
 # Logs
-*.loggit status
+*.log
 # Ruff cache
 .ruff_cache/
 
