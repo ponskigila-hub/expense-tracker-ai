@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi import Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -32,6 +33,16 @@ app = FastAPI(
     title="ExpenseTrackerAI API",
     version="1.0.0",
     lifespan=lifespan
+)
+
+# Allows the Vite dev server (frontend/) to call this API from the browser.
+# Add your deployed frontend's origin here too once you host it somewhere.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(transaction_router)
