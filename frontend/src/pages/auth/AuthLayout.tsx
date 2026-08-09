@@ -10,62 +10,71 @@ export function AuthLayout({
   children: ReactNode
 }) {
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-forest-600 px-12 py-12 text-white lg:flex">
+    <div className="grid min-h-screen lg:grid-cols-2 bg-paper">
+      {/* Left Column — Coffee-Tech style visual editorial hero panel */}
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-[#0D0E13] via-[#12141C] to-[#181B26] px-16 py-16 text-ink lg:flex border-r border-mist-light/40">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-forest-500">
-              <div className="flex flex-col gap-[3px]">
-                <span className="block h-[2px] w-4 rounded bg-paper" />
-                <span className="block h-[2px] w-3 rounded bg-paper" />
-                <span className="block h-[2px] w-4 rounded bg-brass-300" />
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-forest-500 to-forest-700 shadow-[0_0_15px_rgba(200,96,61,0.5)] border border-forest-300/40">
+              <div className="flex flex-col gap-[3.5px] items-center">
+                <span className="block h-[2.5px] w-4 rounded-full bg-ink" />
+                <span className="block h-[2.5px] w-2.5 rounded-full bg-brass-300" />
+                <span className="block h-[2.5px] w-4 rounded-full bg-forest-300" />
               </div>
             </div>
-            <span className="font-display text-lg font-medium">Ledger</span>
+            <span className="font-display text-lg font-bold tracking-tight uppercase">
+              COFFEE<span className="text-forest-500">TECH</span>
+            </span>
           </div>
         </div>
 
-        <div className="relative max-w-md">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-brass-300">
-            ExpenseTrackerAI
-          </p>
-          <h1 className="font-display text-5xl font-medium leading-[1.1]">
-            See where your money goes, <span className="text-brass-300">before</span> it goes.
+        <div className="relative max-w-lg z-10">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-forest-500/30 bg-forest-500/10 px-3 py-1 text-xs font-mono font-semibold uppercase tracking-widest text-forest-500">
+            <span className="h-1.5 w-1.5 rounded-full bg-forest-500 shadow-[0_0_8px_rgba(200,96,61,0.8)]" />
+            ExpenseTrackerAI Platform
+          </div>
+          <h1 className="font-display text-5xl font-extrabold leading-[1.08] tracking-tight uppercase text-ink">
+            See where your money goes, <span className="text-forest-500">before</span> it goes.
           </h1>
-          <p className="mt-5 text-forest-100/80">
-            Automatic categorization, budget alerts, and spending insights —
-            all in one ledger that stays honest with you.
+          <p className="mt-6 text-base leading-relaxed text-ink-soft">
+            Automatic AI categorization, real-time budget telemetry, and financial analytics — precision engineered into your personal ledger.
           </p>
         </div>
 
-        <div className="flex items-end justify-between text-sm text-forest-100/60">
+        <div className="flex items-end justify-between text-xs font-mono uppercase tracking-widest text-mist">
           <span>© {new Date().getFullYear()} ExpenseTrackerAI</span>
-          <span className="font-mono">balance · budgets · insights</span>
+          <span>Balance · Budgets · Insights</span>
         </div>
 
-        {/* Decorative ledger-tape lines */}
+        {/* Ambient background glows */}
         <div
-          className="pointer-events-none absolute -right-24 top-1/3 h-72 w-72 rounded-full bg-forest-500/40 blur-3xl"
+          className="pointer-events-none absolute -bottom-20 -left-20 h-96 w-96 rounded-full bg-forest-500/20 blur-[120px]"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -right-20 top-1/4 h-80 w-80 rounded-full bg-brass-500/15 blur-[100px]"
           aria-hidden="true"
         />
       </div>
 
-      <div className="flex items-center justify-center bg-paper px-6 py-12">
-        <div className="w-full max-w-sm">
+      {/* Right Column — Form card */}
+      <div className="flex items-center justify-center bg-paper px-8 py-16">
+        <div className="w-full max-w-md rounded-2xl border border-mist-light/60 bg-surface/90 p-8 md:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-md">
           <div className="mb-8 lg:hidden">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-forest-500">
-                <div className="flex flex-col gap-[3px]">
-                  <span className="block h-[2px] w-4 rounded bg-paper" />
-                  <span className="block h-[2px] w-3 rounded bg-paper" />
-                  <span className="block h-[2px] w-4 rounded bg-brass-300" />
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-forest-500 to-forest-700">
+                <div className="flex flex-col gap-[3.5px] items-center">
+                  <span className="block h-[2.5px] w-4 rounded-full bg-ink" />
+                  <span className="block h-[2.5px] w-2.5 rounded-full bg-brass-300" />
                 </div>
               </div>
-              <span className="font-display text-lg font-medium text-ink">Ledger</span>
+              <span className="font-display text-lg font-bold tracking-tight text-ink uppercase">
+                COFFEE<span className="text-forest-500">TECH</span>
+              </span>
             </div>
           </div>
-          <h2 className="font-display text-2xl font-semibold tracking-tight text-ink">{title}</h2>
-          <p className="mt-1.5 text-sm text-mist">{subtitle}</p>
+          <h2 className="font-display text-2xl font-extrabold tracking-tight text-ink uppercase">{title}</h2>
+          <p className="mt-2 text-sm text-ink-soft">{subtitle}</p>
           <div className="mt-8">{children}</div>
         </div>
       </div>

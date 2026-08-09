@@ -4,62 +4,59 @@
 
 @layer base {
   :root {
-    /* Light theme — "aged ledger paper" values, as RGB triplets so
-       Tailwind's opacity modifiers (bg-ink/40, etc.) keep working. */
-    --color-paper: 241 243 239;
-    --color-paper-dim: 231 234 228;
-    --color-surface: 255 255 255;
-    --color-ink: 22 35 31;
-    --color-ink-soft: 61 74 69;
-    --color-mist: 139 148 142;
-    --color-mist-light: 216 221 215;
+    /* Light theme — Crisp modern porcelain & high-end dark slate elements */
+    --color-paper: 246 247 250;       /* Crisp porcelain background */
+    --color-paper-dim: 238 240 246;   /* Subtle container contrast */
+    --color-surface: 255 255 255;     /* Pure white card surface */
+    --color-ink: 15 23 42;            /* Deep slate black text */
+    --color-ink-soft: 71 85 105;      /* Soft slate text */
+    --color-mist: 148 163 184;       /* Muted gray text */
+    --color-mist-light: 226 232 240;  /* Subtle slate border */
 
-    --color-forest-50: 233 241 238;
-    --color-forest-100: 201 219 211;
-    --color-forest-300: 92 147 130;
-    --color-forest-500: 31 92 76;
-    --color-forest-600: 25 76 63;
-    --color-forest-700: 18 58 48;
+    --color-forest-50: 254 242 242;
+    --color-forest-100: 254 226 226;
+    --color-forest-300: 248 113 113;
+    --color-forest-500: 200 96 61;     /* Signature Coffee-Tech Terracotta Amber */
+    --color-forest-600: 175 75 48;
+    --color-forest-700: 140 55 32;
 
-    --color-brass-100: 243 227 190;
-    --color-brass-300: 217 174 92;
-    --color-brass-500: 185 133 39;
-    --color-brass-600: 150 105 28;
+    --color-brass-100: 254 243 199;
+    --color-brass-300: 252 211 77;
+    --color-brass-500: 217 119 6;    /* Warm Bronze Accent */
+    --color-brass-600: 180 83 9;
 
-    --color-rust-100: 241 218 211;
-    --color-rust-300: 203 139 118;
-    --color-rust-500: 166 67 47;
-    --color-rust-600: 135 53 38;
+    --color-rust-100: 254 226 226;
+    --color-rust-300: 252 165 165;
+    --color-rust-500: 225 29 72;     /* Carmine Red Alert */
+    --color-rust-600: 190 18 60;
   }
 
   .dark {
-    /* Dark theme — same brand hues, re-tuned for contrast on a dark
-       forest-black background rather than a plain neutral gray, so the
-       app keeps its identity instead of becoming a generic dark UI. */
-    --color-paper: 17 24 22;
-    --color-paper-dim: 24 33 30;
-    --color-surface: 27 37 34;
-    --color-ink: 236 240 236;
-    --color-ink-soft: 179 190 183;
-    --color-mist: 130 143 136;
-    --color-mist-light: 47 60 55;
+    /* Dark theme — Coffee-Tech Obsidian Deep Slate & Glowing Amber accents */
+    --color-paper: 13 14 19;          /* #0D0E13 Ultra dark obsidian */
+    --color-paper-dim: 18 20 28;      /* #12141C Dark slate background */
+    --color-surface: 24 27 38;        /* #181B26 Card glass background */
+    --color-ink: 243 237 227;         /* #F3EDE3 Warm off-white high contrast text */
+    --color-ink-soft: 160 166 182;    /* Soft silver text */
+    --color-mist: 105 113 133;        /* Muted slate text */
+    --color-mist-light: 35 40 56;     /* Subtle glass border */
 
-    --color-forest-50: 24 40 34;
-    --color-forest-100: 30 54 44;
-    --color-forest-300: 106 163 145;
-    --color-forest-500: 62 148 122;
-    --color-forest-600: 48 122 100;
-    --color-forest-700: 38 100 82;
+    --color-forest-50: 38 24 20;
+    --color-forest-100: 60 32 24;
+    --color-forest-300: 175 75 48;
+    --color-forest-500: 200 96 61;    /* #C8603D Signature Coffee-Tech Terracotta Amber */
+    --color-forest-600: 170 76 46;
+    --color-forest-700: 130 55 30;
 
-    --color-brass-100: 56 45 21;
-    --color-brass-300: 217 174 92;
-    --color-brass-500: 216 161 71;
-    --color-brass-600: 232 184 96;
+    --color-brass-100: 45 35 20;
+    --color-brass-300: 225 170 85;    /* Warm Metallic Gold/Bronze */
+    --color-brass-500: 210 145 50;
+    --color-brass-600: 180 120 35;
 
-    --color-rust-100: 54 32 27;
-    --color-rust-300: 203 139 118;
-    --color-rust-500: 216 108 87;
-    --color-rust-600: 233 138 116;
+    --color-rust-100: 48 20 20;
+    --color-rust-300: 240 100 90;
+    --color-rust-500: 220 70 60;     /* Crimson alert */
+    --color-rust-600: 190 50 40;
   }
 
   html {

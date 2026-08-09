@@ -117,19 +117,22 @@ export function PageHeader({
   action?: ReactNode
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-6 border-b border-mist-light/40 pb-6">
       <div>
         {eyebrow && (
-          <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-forest-500">
-            {eyebrow}
-          </p>
+          <div className="mb-2 flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-forest-500 shadow-[0_0_8px_rgba(200,96,61,0.8)]" />
+            <p className="text-xs font-mono font-semibold uppercase tracking-widest text-forest-500">
+              {eyebrow}
+            </p>
+          </div>
         )}
-        <h1 className="font-display text-[2rem] font-semibold leading-tight tracking-tight text-ink">
+        <h1 className="font-display text-3xl md:text-4xl font-extrabold leading-tight tracking-tight text-ink uppercase">
           {title}
         </h1>
-        {description && <p className="mt-1.5 text-[0.9rem] leading-relaxed text-mist">{description}</p>}
+        {description && <p className="mt-2 text-sm md:text-base leading-relaxed text-ink-soft max-w-2xl">{description}</p>}
       </div>
-      {action}
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   )
 }

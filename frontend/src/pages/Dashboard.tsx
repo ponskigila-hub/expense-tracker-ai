@@ -68,56 +68,78 @@ export default function Dashboard() {
       />
 
       {/* Hero balance + stat cards */}
-      <div className="grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-1 flex flex-col justify-between p-6">
-          <div className="flex items-center gap-2 text-sm font-medium text-mist">
-            <Wallet size={16} />
-            Current balance
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-1 flex flex-col justify-between p-6 relative overflow-hidden bg-gradient-to-b from-surface to-paper-dim border-forest-500/30">
+          <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-forest-500">
+            <Wallet size={15} />
+            Telemetry / Current balance
           </div>
-          <div className="mt-4">
+          <div className="mt-6">
             <MoneyDisplay amount={summary?.balance ?? 0} size="hero" tone="auto" />
           </div>
-          <p className="mt-3 text-sm text-mist">Income minus expenses, all time.</p>
+          <p className="mt-4 text-xs font-mono text-mist">Net balance calculation (Income - Expenses)</p>
+          <div className="pointer-events-none absolute -right-10 -bottom-10 h-32 w-32 rounded-full bg-forest-500/10 blur-2xl" />
         </Card>
 
-        <Card className="p-6">
-          <div className="flex items-center gap-2 text-sm font-medium text-mist">
-            <ArrowUpRight size={16} className="text-forest-500" />
-            Total income
+        <Card className="p-6 flex flex-col justify-between relative overflow-hidden">
+          <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-mist">
+            <span className="flex items-center gap-2">
+              <ArrowUpRight size={15} className="text-forest-500" />
+              Total Inflow
+            </span>
+            <span className="text-forest-500 font-bold">INCOME</span>
           </div>
-          <div className="mt-4">
+          <div className="mt-6">
             <MoneyDisplay amount={summary?.income ?? 0} size="lg" tone="forest" />
           </div>
+          <div className="mt-4 text-xs text-mist flex items-center justify-between border-t border-mist-light/30 pt-3">
+            <span>Verified Transactions</span>
+            <span className="text-forest-500 font-mono">Active</span>
+          </div>
         </Card>
 
-        <Card className="p-6">
-          <div className="flex items-center gap-2 text-sm font-medium text-mist">
-            <ArrowDownRight size={16} className="text-rust-500" />
-            Total expenses
+        <Card className="p-6 flex flex-col justify-between relative overflow-hidden">
+          <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-mist">
+            <span className="flex items-center gap-2">
+              <ArrowDownRight size={15} className="text-rust-500" />
+              Total Outflow
+            </span>
+            <span className="text-rust-500 font-bold">EXPENSES</span>
           </div>
-          <div className="mt-4">
+          <div className="mt-6">
             <MoneyDisplay amount={summary?.expense ?? 0} size="lg" tone="rust" />
+          </div>
+          <div className="mt-4 text-xs text-mist flex items-center justify-between border-t border-mist-light/30 pt-3">
+            <span>Calculated Expenses</span>
+            <span className="text-rust-500 font-mono">Tracked</span>
           </div>
         </Card>
       </div>
 
       {insight && (
-        <Card className="mt-4 flex items-start gap-3 border-brass-300/60 bg-brass-100/30 p-4">
-          <Sparkles size={18} className="mt-0.5 shrink-0 text-brass-600" />
-          <p className="text-sm text-ink-soft">{insight}</p>
+        <Card className="mt-6 flex items-start gap-4 border-brass-500/40 bg-gradient-to-r from-brass-500/10 via-surface to-surface p-5">
+          <div className="p-2 rounded-lg bg-brass-500/20 text-brass-500 shrink-0 shadow-[0_0_12px_rgba(225,170,85,0.3)]">
+            <Sparkles size={18} />
+          </div>
+          <div className="flex-1">
+            <div className="text-xs font-mono uppercase tracking-widest text-brass-500 font-semibold mb-1">
+              AI Financial Insight
+            </div>
+            <p className="text-sm text-ink leading-relaxed">{insight}</p>
+          </div>
           <Link
             to="/insights"
-            className="ml-auto shrink-0 whitespace-nowrap text-sm font-medium text-forest-500 hover:underline"
+            className="ml-auto shrink-0 whitespace-nowrap text-xs font-mono uppercase font-bold tracking-wider text-forest-500 hover:text-forest-300 transition-colors"
           >
-            View all
+            View all insights →
           </Link>
         </Card>
       )}
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-5">
+      <div className="mt-6 grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-3">
-          <CardHeader title="30-day trend" subtitle="Income vs. expenses" />
-          <div className="px-3 pb-4 pt-2">
+          <CardHeader title="30-Day Financial Telemetry" subtitle="Income vs. Expense Distribution" />
+          <div className="px-4 pb-6 pt-3">
             {trend.length ? (
               <TrendChart data={trend} />
             ) : (
@@ -127,14 +149,14 @@ export default function Dashboard() {
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader title="By category" subtitle="Where it's going" />
-          <div className="p-5">
+          <CardHeader title="Category Breakdown" subtitle="Capital allocation by sector" />
+          <div className="p-6">
             <CategoryDonut data={categories} />
           </div>
         </Card>
       </div>
 
-      <Card className="mt-4">
+      <Card className="mt-6">
         <CardHeader
           title="Recent transactions"
           action={

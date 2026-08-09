@@ -53,7 +53,23 @@ export default function Receipts() {
         description="Upload a photo and we'll pull out the merchant, amount, and category."
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="mb-6 overflow-hidden rounded-xl border border-mist-light/60 bg-surface/90 shadow-[0_4px_24px_rgba(0,0,0,0.35)]">
+        <div className="relative h-48 w-full overflow-hidden">
+          <img src="/ai_scan_banner.jpg" alt="AI Optical Receipt Scanner" className="h-full w-full object-cover object-center brightness-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0D0E13]/90 via-[#0D0E13]/60 to-transparent flex items-center p-8">
+            <div className="max-w-md">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-forest-500">
+                OCR Telemetry &amp; Intelligence
+              </span>
+              <h2 className="font-display text-2xl font-black uppercase text-ink mt-1">
+                Precision Receipt Optical Scan
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
         <Card className="p-5">
           <input
             ref={inputRef}
