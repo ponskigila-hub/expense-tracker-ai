@@ -15,6 +15,8 @@ import Recurring from '@/pages/Recurring'
 import Receipts from '@/pages/Receipts'
 import ExportPage from '@/pages/Export'
 
+import About from '@/pages/About'
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -40,6 +42,7 @@ export default function App() {
                 <Route path="/recurring" element={<Recurring />} />
                 <Route path="/receipts" element={<Receipts />} />
                 <Route path="/export" element={<ExportPage />} />
+                <Route path="/about" element={<About />} />
               </Route>
 
               <Route path="*" element={<Navigate to="/" replace />} />

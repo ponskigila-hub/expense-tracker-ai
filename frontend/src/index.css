@@ -4,31 +4,31 @@
 
 @layer base {
   :root {
-    /* Light theme — Crisp modern porcelain & high-end dark slate elements */
-    --color-paper: 246 247 250;       /* Crisp porcelain background */
-    --color-paper-dim: 238 240 246;   /* Subtle container contrast */
+    /* Light theme — High contrast, clean modern financial ledger appearance */
+    --color-paper: 248 249 252;       /* Crisp clean background */
+    --color-paper-dim: 235 238 245;   /* Container contrast */
     --color-surface: 255 255 255;     /* Pure white card surface */
-    --color-ink: 15 23 42;            /* Deep slate black text */
-    --color-ink-soft: 71 85 105;      /* Soft slate text */
-    --color-mist: 148 163 184;       /* Muted gray text */
-    --color-mist-light: 226 232 240;  /* Subtle slate border */
+    --color-ink: 15 23 42;            /* High contrast dark slate text */
+    --color-ink-soft: 51 65 85;       /* Crisp medium slate text */
+    --color-mist: 100 116 139;       /* Readable muted text */
+    --color-mist-light: 203 213 225;  /* Defined border outline */
 
     --color-forest-50: 254 242 242;
     --color-forest-100: 254 226 226;
     --color-forest-300: 248 113 113;
-    --color-forest-500: 200 96 61;     /* Signature Coffee-Tech Terracotta Amber */
-    --color-forest-600: 175 75 48;
-    --color-forest-700: 140 55 32;
+    --color-forest-500: 195 65 30;     /* Rich Terracotta Amber */
+    --color-forest-600: 165 50 20;
+    --color-forest-700: 130 40 15;
 
     --color-brass-100: 254 243 199;
     --color-brass-300: 252 211 77;
-    --color-brass-500: 217 119 6;    /* Warm Bronze Accent */
-    --color-brass-600: 180 83 9;
+    --color-brass-500: 180 95 10;     /* Warm Bronze */
+    --color-brass-600: 145 70 5;
 
     --color-rust-100: 254 226 226;
     --color-rust-300: 252 165 165;
-    --color-rust-500: 225 29 72;     /* Carmine Red Alert */
-    --color-rust-600: 190 18 60;
+    --color-rust-500: 220 38 38;     /* Crimson Alert */
+    --color-rust-600: 185 28 28;
   }
 
   .dark {
