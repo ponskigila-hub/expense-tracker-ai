@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme — "aged ledger paper" values, as RGB triplets so
+       Tailwind's opacity modifiers (bg-ink/40, etc.) keep working. */
+    --color-paper: 241 243 239;
+    --color-paper-dim: 231 234 228;
+    --color-surface: 255 255 255;
+    --color-ink: 22 35 31;
+    --color-ink-soft: 61 74 69;
+    --color-mist: 139 148 142;
+    --color-mist-light: 216 221 215;
+
+    --color-forest-50: 233 241 238;
+    --color-forest-100: 201 219 211;
+    --color-forest-300: 92 147 130;
+    --color-forest-500: 31 92 76;
+    --color-forest-600: 25 76 63;
+    --color-forest-700: 18 58 48;
+
+    --color-brass-100: 243 227 190;
+    --color-brass-300: 217 174 92;
+    --color-brass-500: 185 133 39;
+    --color-brass-600: 150 105 28;
+
+    --color-rust-100: 241 218 211;
+    --color-rust-300: 203 139 118;
+    --color-rust-500: 166 67 47;
+    --color-rust-600: 135 53 38;
+  }
+
+  .dark {
+    /* Dark theme — same brand hues, re-tuned for contrast on a dark
+       forest-black background rather than a plain neutral gray, so the
+       app keeps its identity instead of becoming a generic dark UI. */
+    --color-paper: 17 24 22;
+    --color-paper-dim: 24 33 30;
+    --color-surface: 27 37 34;
+    --color-ink: 236 240 236;
+    --color-ink-soft: 179 190 183;
+    --color-mist: 130 143 136;
+    --color-mist-light: 47 60 55;
+
+    --color-forest-50: 24 40 34;
+    --color-forest-100: 30 54 44;
+    --color-forest-300: 106 163 145;
+    --color-forest-500: 62 148 122;
+    --color-forest-600: 48 122 100;
+    --color-forest-700: 38 100 82;
+
+    --color-brass-100: 56 45 21;
+    --color-brass-300: 217 174 92;
+    --color-brass-500: 216 161 71;
+    --color-brass-600: 232 184 96;
+
+    --color-rust-100: 54 32 27;
+    --color-rust-300: 203 139 118;
+    --color-rust-500: 216 108 87;
+    --color-rust-600: 233 138 116;
+  }
+
+  html {
+    @apply bg-paper text-ink;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply font-sans antialiased;
+    line-height: 1.55;
+  }
+  ::selection {
+    @apply bg-brass-100 text-ink;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-forest-500));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Typography scale refinements: headings set in the display serif get
+     tighter tracking and line-height so large sizes don't look loose,
+     while body copy keeps generous leading for readability. */
+  h1, h2, h3, .font-display {
+    letter-spacing: -0.015em;
+  }
+  h1, h2, h3 {
+    line-height: 1.15;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Signature "ledger tape": dashed divider under each transaction row,
+     echoing perforated receipt paper. */
+  .tape-row {
+    background-image: repeating-linear-gradient(
+      to right,
+      transparent,
+      transparent 6px,
+      rgb(var(--color-mist-light)) 6px,
+      rgb(var(--color-mist-light)) 10px
+    );
+    background-position: bottom;
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-mist-light));
+    border-radius: 999px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
