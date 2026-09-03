@@ -3,6 +3,8 @@ import type {
   Budget,
   BudgetInput,
   CategorySummaryItem,
+  ChatMessage,
+  ChatResponse,
   DashboardSummary,
   InsightResponse,
   MonthlySummaryItem,
@@ -142,6 +144,14 @@ export const api = {
 
   insights: {
     get: () => request<InsightResponse>('/insights'),
+  },
+
+  assistant: {
+    ask: (message: string, history: ChatMessage[] = []) =>
+      request<ChatResponse>('/chat', {
+        method: 'POST',
+        body: JSON.stringify({ message, history }),
+      }),
   },
 
   prediction: {

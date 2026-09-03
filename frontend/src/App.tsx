@@ -11,6 +11,7 @@ import Transactions from '@/pages/transactions/Transactions'
 import Budgets from '@/pages/Budgets'
 import Analytics from '@/pages/Analytics'
 import Insights from '@/pages/Insights'
+import Assistant from '@/pages/Assistant'
 import Recurring from '@/pages/Recurring'
 import Receipts from '@/pages/Receipts'
 import ExportPage from '@/pages/Export'
@@ -39,6 +40,7 @@ export default function App() {
                 <Route path="/budgets" element={<Budgets />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/insights" element={<Insights />} />
+                <Route path="/assistant" element={<Assistant />} />
                 <Route path="/recurring" element={<Recurring />} />
                 <Route path="/receipts" element={<Receipts />} />
                 <Route path="/export" element={<ExportPage />} />

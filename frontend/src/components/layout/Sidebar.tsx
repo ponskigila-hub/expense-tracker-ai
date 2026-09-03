@@ -9,6 +9,7 @@ import {
   ScanLine,
   Download,
   Sparkles,
+  MessageCircle,
   LogOut,
 } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
@@ -19,6 +20,7 @@ const nav = [
   { to: '/budgets', label: 'Budgets', icon: PiggyBank },
   { to: '/analytics', label: 'Analytics', icon: LineChart },
   { to: '/insights', label: 'AI Insights', icon: Sparkles },
+  { to: '/assistant', label: 'AI Assistant', icon: MessageCircle },
   { to: '/recurring', label: 'Recurring', icon: Repeat },
   { to: '/receipts', label: 'Scan Receipt', icon: ScanLine },
   { to: '/export', label: 'Export', icon: Download },

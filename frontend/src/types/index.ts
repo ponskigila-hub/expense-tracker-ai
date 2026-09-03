@@ -92,6 +92,16 @@ export interface InsightResponse {
   generated_by: 'llm' | 'rule_based'
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+export interface ChatResponse {
+  reply: string
+  generated_by: 'llm' | 'rule_based'
+}
+
 export interface RecurringTransaction {
   id: number
   description: string
