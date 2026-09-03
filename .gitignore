@@ -16,7 +16,8 @@ dist/
 build/
 
 # Environment variables / secrets
-.env
+backend/.env
+frontend/.env
 .env.local
 *.local
 
