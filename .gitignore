@@ -16,10 +16,12 @@ dist/
 build/
 
 # Environment variables / secrets
-backend/.env
-frontend/.env
+# (only .env.example is meant to be tracked/edited — never .env itself)
+.env
 .env.local
 *.local
+backend/.env
+frontend/.env
 
 # Databases
 *.db

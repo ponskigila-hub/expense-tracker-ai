@@ -146,36 +146,38 @@ class ChatService:
         history: list[dict],
     ) -> str | None:
         """
-        Calls the Anthropic Messages API with the conversation plus grounding
-        context. Returns None (never raises) on any failure — missing API
-        key, network error, unexpected response shape — so the caller can
-        fall back to the rule-based responder.
+        Calls the Gemini API (generateContent) with the conversation plus
+        grounding context. Returns None (never raises) on any failure —
+        missing API key, network error, unexpected response shape — so
+        the caller can fall back to the rule-based responder.
         """
 
-        if not settings.ANTHROPIC_API_KEY:
+        if not settings.GEMINI_API_KEY:
             return None
 
         system_prompt = ChatService._build_system_prompt(context)
 
-        messages = [
-            {"role": turn["role"], "content": turn["content"]}
+        # Gemini's multi-turn format uses "model" instead of "assistant"
+        # for the assistant's own prior turns.
+        contents = [
+            {
+                "role": "model" if turn["role"] == "assistant" else "user",
+                "parts": [{"text": turn["content"]}],
+            }
             for turn in history[-MAX_HISTORY_MESSAGES:]
         ]
-        messages.append({"role": "user", "content": message})
+        contents.append({"role": "user", "parts": [{"text": message}]})
 
         try:
             response = httpx.post(
-                "https://api.anthropic.com/v1/messages",
-                headers={
-                    "x-api-key": settings.ANTHROPIC_API_KEY,
-                    "anthropic-version": "2023-06-01",
-                    "content-type": "application/json",
-                },
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{settings.GEMINI_MODEL}:generateContent",
+                params={"key": settings.GEMINI_API_KEY},
+                headers={"content-type": "application/json"},
                 json={
-                    "model": settings.ANTHROPIC_MODEL,
-                    "max_tokens": 400,
-                    "system": system_prompt,
-                    "messages": messages,
+                    "systemInstruction": {"parts": [{"text": system_prompt}]},
+                    "contents": contents,
+                    "generationConfig": {"maxOutputTokens": 400},
                 },
                 timeout=15.0,
             )
@@ -183,17 +185,16 @@ class ChatService:
             response.raise_for_status()
             data = response.json()
 
-            text_blocks = [
-                block["text"]
-                for block in data.get("content", [])
-                if block.get("type") == "text"
-            ]
+            candidates = data.get("candidates", [])
+            parts = candidates[0]["content"]["parts"] if candidates else []
 
-            full_text = "\n".join(text_blocks).strip()
+            full_text = "\n".join(
+                part["text"] for part in parts if "text" in part
+            ).strip()
 
             return full_text or None
 
-        except (httpx.HTTPError, KeyError, ValueError, TypeError):
+        except (httpx.HTTPError, KeyError, IndexError, ValueError, TypeError):
             return None
 
     # ---------------------------------------------------------------

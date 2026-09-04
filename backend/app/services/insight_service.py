@@ -221,33 +221,30 @@ class InsightService:
     @staticmethod
     def generate_llm_insights(stats: dict) -> list[str] | None:
         """
-        Calls the Anthropic Messages API to turn the stats into natural
-        language insights. Returns None (never raises) on any failure —
-        missing API key, network error, unexpected response shape — so
-        the caller can fall back to the rule-based generator. This means
-        the endpoint works with zero configuration, and gets an upgrade
-        automatically if ANTHROPIC_API_KEY is set in .env.
+        Calls the Gemini API (generateContent) to turn the stats into
+        natural language insights. Returns None (never raises) on any
+        failure — missing API key, network error, unexpected response
+        shape — so the caller can fall back to the rule-based generator.
+        This means the endpoint works with zero configuration, and gets
+        an upgrade automatically if GEMINI_API_KEY is set in .env.
         """
 
-        if not settings.ANTHROPIC_API_KEY:
+        if not settings.GEMINI_API_KEY:
             return None
 
         prompt = InsightService._build_prompt(stats)
 
         try:
             response = httpx.post(
-                "https://api.anthropic.com/v1/messages",
-                headers={
-                    "x-api-key": settings.ANTHROPIC_API_KEY,
-                    "anthropic-version": "2023-06-01",
-                    "content-type": "application/json",
-                },
+                f"https://generativelanguage.googleapis.com/v1beta/models/"
+                f"{settings.GEMINI_MODEL}:generateContent",
+                params={"key": settings.GEMINI_API_KEY},
+                headers={"content-type": "application/json"},
                 json={
-                    "model": settings.ANTHROPIC_MODEL,
-                    "max_tokens": 300,
-                    "messages": [
-                        {"role": "user", "content": prompt}
+                    "contents": [
+                        {"role": "user", "parts": [{"text": prompt}]}
                     ],
+                    "generationConfig": {"maxOutputTokens": 300},
                 },
                 timeout=10.0,
             )
@@ -255,13 +252,12 @@ class InsightService:
             response.raise_for_status()
             data = response.json()
 
-            text_blocks = [
-                block["text"]
-                for block in data.get("content", [])
-                if block.get("type") == "text"
-            ]
+            candidates = data.get("candidates", [])
+            parts = candidates[0]["content"]["parts"] if candidates else []
 
-            full_text = "\n".join(text_blocks).strip()
+            full_text = "\n".join(
+                part["text"] for part in parts if "text" in part
+            ).strip()
 
             if not full_text:
                 return None
@@ -274,7 +270,7 @@ class InsightService:
 
             return lines[:5] if lines else None
 
-        except (httpx.HTTPError, KeyError, ValueError, TypeError):
+        except (httpx.HTTPError, KeyError, IndexError, ValueError, TypeError):
             return None
 
     @staticmethod

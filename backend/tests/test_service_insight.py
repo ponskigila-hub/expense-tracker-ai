@@ -46,8 +46,8 @@ def test_rule_based_insight_no_history_message():
 def test_llm_insights_returns_none_without_api_key():
 
     from app.config import settings
-    original = settings.ANTHROPIC_API_KEY
-    settings.ANTHROPIC_API_KEY = None
+    original = settings.GEMINI_API_KEY
+    settings.GEMINI_API_KEY = None
 
     try:
         result = InsightService.generate_llm_insights({"this_month": "2026-08", "last_month": "2026-07",
@@ -56,4 +56,4 @@ def test_llm_insights_returns_none_without_api_key():
             "current_income": 0, "previous_income": 0})
         assert result is None
     finally:
-        settings.ANTHROPIC_API_KEY = original
+        settings.GEMINI_API_KEY = original

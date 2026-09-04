@@ -19,7 +19,7 @@ services:
         value: "30"
       # Optional (Sprint 18/21) — leave unset in the dashboard to skip
       # these features gracefully rather than erroring.
-      - key: ANTHROPIC_API_KEY
+      - key: GEMINI_API_KEY
         sync: false
       - key: SMTP_HOST
         sync: false
