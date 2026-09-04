@@ -6,6 +6,7 @@ import httpx
 
 from app.models.transaction import Transaction
 from app.config import settings
+from app.utils.db_helpers import month_expr
 
 
 def _shift_month(d: date, months: int) -> date:
@@ -70,7 +71,7 @@ class InsightService:
         history_rows = (
             db.query(
                 Transaction.category,
-                func.strftime("%Y-%m", Transaction.date).label("month"),
+                month_expr(db, Transaction.date).label("month"),
                 func.sum(Transaction.amount).label("total")
             )
             .filter(
@@ -79,7 +80,7 @@ class InsightService:
                 Transaction.date >= history_start,
                 Transaction.date < this_month_start
             )
-            .group_by(Transaction.category, "month")
+            .group_by(Transaction.category, month_expr(db, Transaction.date))
             .all()
         )
 

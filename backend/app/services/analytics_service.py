@@ -9,9 +9,7 @@ from app.schemas.analytics import (
     CategorySummaryItem,
     TrendPoint,
 )
-
-# NOTE: grouping uses SQLite's strftime(). If this project ever moves to
-# PostgreSQL (see Sprint 27), swap these for to_char()/date_trunc() equivalents.
+from app.utils.db_helpers import month_expr
 
 
 class AnalyticsService:
@@ -51,17 +49,17 @@ class AnalyticsService:
         user_id: int
     ) -> list[MonthlySummaryItem]:
 
-        month_expr = func.strftime("%Y-%m", Transaction.date)
+        month_expr_ = month_expr(db, Transaction.date)
 
         rows = (
             db.query(
-                month_expr.label("month"),
+                month_expr_.label("month"),
                 Transaction.type,
                 func.sum(Transaction.amount).label("total")
             )
             .filter(Transaction.user_id == user_id)
-            .group_by(month_expr, Transaction.type)
-            .order_by(month_expr)
+            .group_by(month_expr_, Transaction.type)
+            .order_by(month_expr_)
             .all()
         )
 
@@ -189,7 +187,7 @@ class AnalyticsService:
         months: int
     ) -> list[TrendPoint]:
 
-        month_expr = func.strftime("%Y-%m", Transaction.date)
+        month_expr_ = month_expr(db, Transaction.date)
 
         # Compute the earliest month boundary (approx, using 31-day steps
         # then normalizing to the 1st) so the SQL side can filter cheaply.
@@ -200,7 +198,7 @@ class AnalyticsService:
 
         rows = (
             db.query(
-                month_expr.label("month"),
+                month_expr_.label("month"),
                 Transaction.type,
                 func.sum(Transaction.amount).label("total")
             )
@@ -208,7 +206,7 @@ class AnalyticsService:
                 Transaction.user_id == user_id,
                 Transaction.date >= cutoff
             )
-            .group_by(month_expr, Transaction.type)
+            .group_by(month_expr_, Transaction.type)
             .all()
         )
 
