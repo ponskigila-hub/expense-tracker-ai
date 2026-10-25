@@ -1,3 +1,4 @@
+
 _expensetracker_root="/c/College Full/Projects/ExpenseTrackerAI"
 _expensetracker_venv="$_expensetracker_root/backend/venv"
 
