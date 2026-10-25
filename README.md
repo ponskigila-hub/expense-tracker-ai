@@ -2,7 +2,7 @@
 
 An AI-powered personal finance management application that helps users track expenses, analyze spending habits, and receive intelligent financial insights.
 
-Built with a modern full-stack architecture and practical machine learning for real-world expense categorization and spending analysis.
+Built with a modern full-stack architecture and practical machine learning for expense categorization and spending analysis.
 
 ---
 
@@ -20,11 +20,27 @@ Built with a modern full-stack architecture and practical machine learning for r
 - Scheduled notifications
 
 ### AI Features
-- 🤖 **Automatic expense categorization** — TF-IDF + Multinomial Naive Bayes classifier trained on curated Indonesian-relevant examples, with confidence scoring and keyword fallback
+- 🤖 **Expense category prediction** — TF-IDF + Multinomial Naive Bayes classifier trained on curated Indonesian-relevant examples, with confidence scoring and keyword fallback (`POST /predict-category`)
 - 📊 **Personalized financial insights** — month-over-month and historical average comparison; optional Gemini LLM for natural-language insights
 - 🧾 **Receipt OCR** — extract transaction details from receipt images (pytesseract)
 - 💬 **AI Financial Assistant** — chat with your financial data using natural language
-- 📉 **Spending pattern detection** — flags unusual category-level changes based on historical behavior
+- 📉 **Spending pattern detection** — flags unusual category-level changes based on historical behavior (rule-based)
+
+---
+
+## ⚠️ Known Limitations
+
+Be aware of the current scope of the ML features:
+
+| Limitation | Detail |
+|------------|--------|
+| **Small training set** | Category model is trained on ~100 hand-curated examples, not a large real-world transaction corpus |
+| **No formal evaluation** | There is no held-out test set, cross-validation report, or published accuracy metrics yet |
+| **Prediction is opt-in** | Creating a transaction does **not** auto-fill the category. The client must call `POST /predict-category` and send the predicted category if desired |
+| **Unusual spending = rules, not ML** | Insights compare current vs previous month and historical averages with fixed thresholds. Formal anomaly detection models (e.g. Isolation Forest) are not implemented |
+| **LLM features need a key** | Gemini-backed insights/chat only activate when `GEMINI_API_KEY` is set; otherwise the app falls back to rule-based responses |
+
+These limits are intentional for a portfolio-stage project. The architecture is structured so the training data, classifier, and insight logic can be upgraded later without rewriting the API surface.
 
 ---
 
@@ -79,8 +95,9 @@ ExpenseTrackerAI/
 │   │   ├── repositories/
 │   │   ├── database/
 │   │   └── main.py
-│   ├── alembic/
-│   ├── requirements.txt
+│   ├── alembic/              # DB migrations
+│   ├── .env.example
+│   ├── requirements.txt      # Backend dependencies (use this)
 │   └── Dockerfile
 ├── frontend/
 ├── docker-compose.yml
@@ -88,15 +105,18 @@ ExpenseTrackerAI/
 └── README.md
 ```
 
+> **Note:** A `requirements.txt` may also exist at the repo root from earlier experiments. For local backend setup, always install from **`backend/requirements.txt`**.
+
 ---
 
 ## 🧠 How the AI Works
 
-### Automatic Expense Categorization
+### Expense Category Prediction
 - Model: TF-IDF (1–2 grams) + Multinomial Naive Bayes
 - Training data: ~100 hand-curated examples with strong Indonesian context (Gojek, Kopi Kenangan, Indomaret, PLN, Shopee, etc.)
 - Confidence threshold + keyword fallback when vocabulary overlap is low
 - Endpoint: `POST /predict-category`
+- **Not wired into `POST /transactions` by default** — the frontend (or API client) decides whether to call prediction and pass the category
 
 Categories include: Food, Groceries, Transportation, Entertainment, Subscription, Shopping, Bills, Health, Education, Travel, Income, and Others.
 
@@ -122,36 +142,46 @@ Categories include: Food, Groceries, Transportation, Entertainment, Subscription
 - Node.js 18+
 - (Optional) Docker
 
-### Backend
+### Backend (from repo root)
+
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+source venv/bin/activate          # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-# Copy and configure environment
-cp .env.example .env
+cp .env.example .env              # then edit values as needed
 
-# Run migrations (if using Alembic)
-alembic upgrade head
+alembic upgrade head              # apply migrations
 
-# Start API
 uvicorn app.main:app --reload
 ```
 
-API docs available at: `http://localhost:8000/docs`
+API docs: `http://localhost:8000/docs`
+
+Expected backend files for this flow:
+- `backend/requirements.txt`
+- `backend/.env.example`
+- `backend/alembic/` + `backend/alembic.ini`
+- `backend/app/main.py`
 
 ### Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### Docker
+### Docker (recommended for sharing)
+
+From the **repo root**:
+
 ```bash
 docker-compose up --build
 ```
+
+Others do not need a local Python install or `pip install -r requirements.txt` when using Docker.
 
 ---
 
@@ -160,9 +190,9 @@ docker-compose up --build
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/auth/register`, `/auth/login` | Authentication |
-| CRUD | `/transactions` | Transaction management |
+| CRUD | `/transactions` | Transaction management (category supplied by client) |
 | GET | `/dashboard`, `/summary/*` | Analytics |
-| POST | `/predict-category` | AI category prediction |
+| POST | `/predict-category` | ML category prediction |
 | GET | `/insights` | Spending insights |
 | POST | `/chat` | Financial assistant |
 | POST | `/receipts` | Receipt OCR upload |
@@ -179,13 +209,15 @@ docker-compose up --build
 | Transaction CRUD + search/filter | ✅ Done |
 | Dashboard & analytics | ✅ Done |
 | Budget & recurring transactions | ✅ Done |
-| ML category classification | ✅ Done |
+| ML category classification (predict endpoint) | ✅ Done |
 | Insights (rule-based + optional LLM) | ✅ Done |
 | Receipt OCR | ✅ Done |
 | AI Chat Assistant | ✅ Done |
 | Docker & CI | ✅ Done |
+| Auto-fill category on transaction create | 🔜 Not yet |
+| Held-out evaluation / metrics for classifier | 🔜 Not yet |
 | Advanced forecasting models | 🔜 Planned |
-| Formal anomaly detection models | 🔜 Planned |
+| Formal anomaly detection models (e.g. Isolation Forest) | 🔜 Planned |
 | Goal tracking | 🔜 Planned |
 
 ---
